@@ -21,12 +21,6 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#if __APPLE__
-#include <malloc/malloc.h>
-#else
-#include <malloc.h>
-#endif
-
 #include <pthread.h>
 #include <stdarg.h>
 
