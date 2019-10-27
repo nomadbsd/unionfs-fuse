@@ -3,6 +3,9 @@ project(unionfs-fuse C)
 cmake_minimum_required(VERSION 2.0)
 INCLUDE (CheckIncludeFiles)
 
+link_directories(/usr/local/lib)
+include_directories(/usr/local/include)
+
 # Set a default build type for single-configuration
 # CMake generators if no build type is set.
 IF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
@@ -10,17 +13,11 @@ IF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
 ENDIF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
 
 # Select flags.
-SET(CMAKE_C_FLAGS "-pipe -W -Wall -DFORTIFY_SOURCE=2")
-SET(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g")
-SET(CMAKE_C_FLAGS_RELEASE "-O2")
-SET(CMAKE_C_FLAGS_DEBUG "-O0 -g -DDEBUG")
-
-if (UNIX AND APPLE)
-  include_directories("/usr/local/include/osxfuse/fuse")
-endif()
+SET(CMAKE_C_FLAGS "-pipe -Wall -static")
+#SET(CMAKE_C_FLAGS_DEBUG "-O0 -g -DDEBUG")
 
 add_definitions(-D_FILE_OFFSET_BITS=64 -DFUSE_USE_VERSION=26)
-
+add_definitions(-D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -D__BSD_VISIBLE=1)
 option(WITH_XATTR "Enable support for extended attributes" OFF)
 
 # .h include files
