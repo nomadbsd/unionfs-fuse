@@ -68,8 +68,16 @@ static int unionfs_chmod(const char *path, mode_t mode) {
 	if (BUILD_PATH(p, uopt.branches[i].path, path)) RETURN(-ENAMETOOLONG);
 
 	int res = chmod(p, mode);
-	if (res == -1) RETURN(-errno);
-
+	/*
+	 * PLEASE FIX
+	 *
+	 * Dirty hack to prevent pkg from exiting with an error due to
+	 * chmod() returning ENOENT.
+	 */
+	if (res == -1) {
+		if (errno != ENOENT)
+			RETURN(-errno);
+	}
 	RETURN(0);
 }
 
